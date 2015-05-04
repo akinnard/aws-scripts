@@ -9,7 +9,7 @@ buckets=`aws s3 ls | cut -f3 -d ' '`
 for x in $buckets ; do
 
   # could not figure out how to do the grouping in the command line tool, so letting awk do it
-  echo "$x - `aws s3api list-objects --bucket $x --output text --query 'Contents[*].{SC:StorageClass, Size:Size, Name:Key}' |  awk '{sum[$2]+= $3;}END{for (s in sum){print s, "-" ,sum[s]}}'`"
+  echo "$x - `aws s3api list-objects --bucket $x --output text --query 'Contents[*].{SC:StorageClass, Size:Size}' |  awk '{sum[$1]+= $2;}END{for (s in sum){print s, "-" ,sum[s]}}'`"
 
 
 done
