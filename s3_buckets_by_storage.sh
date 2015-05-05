@@ -5,12 +5,12 @@
 # this variation breaks out the storage by class. This is so if you have glacier it shows it to you broken out
 
 buckets=`aws s3 ls | cut -f3 -d ' '`
-
 for x in $buckets ; do
-	size=`echo "\`aws s3api list-objects --bucket $x --output text --query 'Contents[*].{SC:StorageClass, Size:Size}' |  awk '{sum[$1]+= $2;}END{for (s in sum){print s, "|" ,sum[s]}}'\`"`
-  # could not figure out how to do the grouping in the command line tool, so letting awk do it
-  while read -r line; do
-  	echo "$x | $line"
+	size=`echo -e "\`aws s3api list-objects --bucket $x --output text --query 'Contents[*].{SC:StorageClass, Size:Size}' |  awk '{sum[$1]+= $2;}END{for (s in sum){print "\n", s, "," ,sum[s], "&"}}'\`"` 
+  while read -r -d'&' line; do
+  	echo "$x , $line"
   done <<< $size
+  
+  
 done
 echo ""
